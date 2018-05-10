@@ -1,0 +1,94 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:id="@+id/notification_switch"
+        android:defaultValue="false"
+        android:key="notification_switch"
+        android:summary="@string/pref_description_notification"
+        android:textOff="Off"
+        android:textOn="On"
+        android:title="@string/pref_title_notifications" />
+
+    <SwitchPreference
+        android:id="@+id/popup_switch"
+        android:defaultValue="false"
+        android:key="popup_switch"
+        android:summary="@string/pref_description_popup"
+        android:textOff="Off"
+        android:textOn="On"
+        android:title="@string/pref_title_popup" />
+
+    <SeekBarPreference
+        android:id="@+id/popupTimeBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:key="edit_seek_bar"
+        android:max="250"
+        android:min="1"
+        android:dependency="popup_switch"
+        android:title="@string/pref_title_popup_time"
+        android:summary="@string/pref_description_popup_time_summary"
+        />
+
+    <SeekBarPreference
+        android:id="@+id/popupHeightBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:key="edit_seek_bar_height"
+        android:max="100"
+        android:min="0"
+        android:dependency="popup_switch"
+        android:title="@string/pref_title_popup_height"
+        android:summary="@string/pref_description_popup_height_summary"
+        />
+
+    <SeekBarPreference
+        android:id="@+id/popupTransparencyBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:key="edit_seek_bar_transparency"
+        android:max="255"
+        android:min="1"
+        android:dependency="popup_switch"
+        android:title="@string/pref_title_popup_transparency"
+        android:summary="@string/pref_description_popup_transparency_summary"
+        />
+
+    <SeekBarPreference
+        android:id="@+id/popupTitleSize"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:key="edit_seek_bar_title_size"
+        android:max="10"
+        android:min="1"
+        android:dependency="popup_switch"
+        android:title="@string/pref_title_popup_title_size"
+        android:summary="@string/pref_description_popup_title_size_summary"
+        />
+
+    <SeekBarPreference
+        android:id="@+id/popupTextSize"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:key="edit_seek_bar_text_size"
+        android:max="10"
+        android:min="1"
+        android:dependency="popup_switch"
+        android:title="@string/pref_title_popup_text_size"
+        android:summary="@string/pref_description_popup_text_size_summary"
+        />
+
+    <Preference android:title="@string/pref_test_popup_button"
+        android:key="button_test_popup"
+        android:summary="Clic to test the popup parameters"
+        android:dependency="popup_switch"
+        />
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+
+    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
+         dismiss it. -->
+    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+
+</PreferenceScreen>
