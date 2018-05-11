@@ -23,8 +23,6 @@ public class PlayingSongPopupReceiver extends PlayingSongBaseReceiver {
         intent.putExtra("albumArt", albumArtUri != null ? albumArtUri.toString() : "");
 
 
-
-
         context.startActivity(intent);
 
 

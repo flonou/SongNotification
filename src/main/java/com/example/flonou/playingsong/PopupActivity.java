@@ -46,12 +46,19 @@ public class PopupActivity extends Activity {
             return;
         }
 
+        createPopup();
+
+        countDown();
+    }
+
+    void createPopup()
+    {
         String artist = getIntent().getStringExtra("artist");
         String album = getIntent().getStringExtra("album");
         String track = getIntent().getStringExtra("track");
         String albumArtUriString = getIntent().getStringExtra("albumArt");
         Uri albumArtUri = !albumArtUriString.equals("")? Uri.parse(albumArtUriString) : null;
-        Log.d("SongNotif", "popup activity created : " + artist);
+        Log.d("SongNotif", "popup created : " + artist);
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -59,15 +66,34 @@ public class PopupActivity extends Activity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int position = preferences.getInt("edit_seek_bar_height", 1);
 
+
         int height = (int)(dm.heightPixels*0.15);
         int width = (int)(dm.widthPixels*0.7);
+
+        if (isLandscape())
+        {
+            Log.d("SongNotif", "is landscape");
+            height = (int)(dm.widthPixels*0.15);
+            width = (int)(dm.heightPixels*0.7);
+        }
+
+        Log.d("SongNotif", "height : " + height + "   width : " + width);
         getWindow().setLayout(width,height);
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
+
         params.gravity = Gravity.TOP;
         params.x = 0;
-        params.y = dm.heightPixels*position / 100;
+
+        int availableSpace = dm.heightPixels-height;
+
+        params.y = availableSpace*position / 100;
         getWindow().setAttributes(params);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        // clicks go through
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         //getWindow().setTransitionBackgroundFadeDuration(10);
         GradientDrawable shape =  new GradientDrawable();
         shape.setColor(Color.WHITE);
@@ -200,10 +226,30 @@ public class PopupActivity extends Activity {
         firstLayout.addView(progressBar, lp0);
 
         setContentView(firstLayout);
+}
 
-        countDown();
+    public boolean isLandscape()
+    {
+        return getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
     }
 
+    public static boolean isXLargeScreen(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+        & android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK)
+        >= android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE;
+    }
+
+   /* @Override
+public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+
+    // Checks the orientation of the screen
+    if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+    } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+        Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+    }
+}*/
 
     @Override
     protected void onNewIntent(Intent intent)
@@ -216,7 +262,15 @@ public class PopupActivity extends Activity {
             Log.d("SongNotif", "end of popup");
             this.finish();
         }
-        countDown();
+        if (timer != null)
+            Log.d("SongNotif", "got new intent : " + timer.elapsedTime);
+        // filter new intents if this was lees thant 100ms ago
+        if (timer == null || timer.elapsedTime > 100)
+        {
+            setIntent(intent);
+            createPopup();
+            countDown();
+        }
     }
 
     public void countDown() {
@@ -233,6 +287,8 @@ public class PopupActivity extends Activity {
         Activity mActivity;
         int time = 0;
         ProgressBar progressBar = null;
+        public boolean isRunning = false;
+        public long elapsedTime = 0;
 
         public PopupTimer(PopupActivity activity, int millisec)
         {
@@ -250,7 +306,8 @@ public class PopupActivity extends Activity {
         }
 
         public void onTick(long millisUntilFinished) {
-
+            isRunning = true;
+            elapsedTime = time - millisUntilFinished;
             int seconds = (int) (millisUntilFinished / 1000) % 60;
             //int minutes = (int) ((millisUntilFinished / (1000*60)) % 60);
             //int hours   = (int) ((millisUntilFinished / (1000*60*60)) % 24);
@@ -271,6 +328,7 @@ public class PopupActivity extends Activity {
         public void onFinish() {
             //timer.setText("Completed");
             //goToResult();
+            isRunning = false;
             Log.d("SongNotif", "end of popup due to timer");
             mActivity.finish();
         }
@@ -327,7 +385,7 @@ public class PopupActivity extends Activity {
                     Log.d("SongNotif", "max height : " + maxHeight);
                     Log.d("SongNotif", "current height : " + height_in_pixels);
                     if (maxHeight != -1 && height_in_pixels > maxHeight)
-                        newSize = Math.min(newSize, maxHeight / textView.getLineCount()* maxNumberOfLine);
+                        newSize = Math.min(newSize, maxHeight / textView.getLineCount());
                     Log.d("SongNotif", "new size : " + newSize);
 
                     if (biggerTextView != null)

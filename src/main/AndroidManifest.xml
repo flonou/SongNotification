@@ -55,6 +55,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:launchMode="singleInstance"
             android:excludeFromRecents="true"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             ></activity>
     </application>
 

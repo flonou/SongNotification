@@ -32,6 +32,7 @@ public class PlayingSongBaseReceiver extends BroadcastReceiver {
 
         String action = intent.getAction();
 
+        // wtf sony ?
         if (action.equals("com.sonyericsson.music.playbackcontrol.ACTION_TRACK_STARTED"))
             playing = true;
         if (playing)
