@@ -54,30 +54,6 @@
         android:summary="@string/pref_description_popup_transparency_summary"
         />
 
-    <SeekBarPreference
-        android:id="@+id/popupTitleSize"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:key="edit_seek_bar_title_size"
-        android:max="10"
-        android:min="1"
-        android:dependency="popup_switch"
-        android:title="@string/pref_title_popup_title_size"
-        android:summary="@string/pref_description_popup_title_size_summary"
-        />
-
-    <SeekBarPreference
-        android:id="@+id/popupTextSize"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:key="edit_seek_bar_text_size"
-        android:max="10"
-        android:min="1"
-        android:dependency="popup_switch"
-        android:title="@string/pref_title_popup_text_size"
-        android:summary="@string/pref_description_popup_text_size_summary"
-        />
-
     <Preference android:title="@string/pref_test_popup_button"
         android:key="button_test_popup"
         android:summary="Clic to test the popup parameters"

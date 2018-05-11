@@ -89,10 +89,7 @@
     <string name="pref_description_popup_height_summary">The vertical position of the popup</string>
     <string name="pref_title_popup_transparency">Popup transparency</string>
     <string name="pref_description_popup_transparency_summary">The popup transparency</string>
-    <string name="pref_title_popup_title_size">Song title text size</string>
-    <string name="pref_description_popup_title_size_summary">The size of the song title on the popup</string>
-    <string name="pref_title_popup_text_size">Other texts size</string>
-    <string name="pref_description_popup_text_size_summary">The size of the other texts on the popup</string>
+
     <string name="pref_test_popup_button">Test popup</string>
 
 

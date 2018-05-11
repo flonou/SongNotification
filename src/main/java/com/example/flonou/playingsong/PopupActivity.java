@@ -16,6 +16,8 @@ import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.TextViewCompat;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -105,29 +107,29 @@ public class PopupActivity extends Activity {
         getWindow().setBackgroundDrawable(shape);
         this.setFinishOnTouchOutside(true);
 
-        final TextView textViewTrack = new TextView(this);
+        AppCompatTextView textViewTrack = new AppCompatTextView(this);
         textViewTrack.setTypeface(null, Typeface.BOLD);
+        textViewTrack.setMaxLines(2);
+        textViewTrack.setMinLines(1);
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewTrack, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         textViewTrack.setText(track);
-        int titleSize = preferences.getInt("edit_seek_bar_title_size", 4);
-        textViewTrack.setTextSize(6*titleSize);
-        textViewTrack.post(new SizeAdjuster(textViewTrack, spToPx(6*titleSize, this), height/2 -40, 2));
         textViewTrack.setTextColor(Color.BLACK);
         textViewTrack.setId(1);
 
-        TextView textViewArtist = new TextView(this);
+        AppCompatTextView textViewArtist = new AppCompatTextView(this);
         textViewArtist.setText(artist);
-        int textSize = preferences.getInt("edit_seek_bar_text_size", 3);
-        textViewArtist.setTextSize(6*titleSize);
-        textViewArtist.post(new SizeAdjuster(textViewArtist, spToPx(3*titleSize, this), textViewTrack, 10));
-
+        textViewArtist.setMaxLines(2);
+        textViewArtist.setMinLines(1);
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewArtist, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         textViewArtist.setTextColor(Color.DKGRAY);
         textViewArtist.setId(2);
 
-        TextView textViewAlbum = new TextView(this);
+        AppCompatTextView textViewAlbum = new AppCompatTextView(this);
         textViewAlbum.setTypeface(null, Typeface.ITALIC);
         textViewAlbum.setText(album);
-        textViewAlbum.setTextSize(6*titleSize);
-        textViewAlbum.post(new SizeAdjuster(textViewAlbum, spToPx(3*titleSize, this), textViewArtist, 10));
+        textViewAlbum.setMaxLines(2);
+        textViewAlbum.setMinLines(1);
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewAlbum, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
         textViewAlbum.setTextColor(Color.DKGRAY);
         textViewAlbum.setId(3);
 
@@ -187,9 +189,9 @@ public class PopupActivity extends Activity {
         imageView.setBackground(border2);*/
         }
         RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams
-                (width-height-20, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                (width-height-20, height/2 - 10);
         lp2.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        lp2.setMargins(10, 10, 10,5);
+        lp2.setMargins(10, 10, 10,0);
         firstLayout.addView(textViewTrack, lp2);
 
       /*  GradientDrawable border2 = new GradientDrawable();
@@ -198,9 +200,9 @@ public class PopupActivity extends Activity {
         textViewTrack.setBackground(border2);
 */
         RelativeLayout.LayoutParams lp3 = new RelativeLayout.LayoutParams
-                (width-height-20, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                (width-height-20, height/4);
         lp3.addRule(RelativeLayout.BELOW,textViewTrack.getId());
-        lp3.setMargins(10, 0, 10,0);
+        lp3.setMargins(10, -10, 10,0);
         firstLayout.addView(textViewArtist, lp3);
 
         /*GradientDrawable border3 = new GradientDrawable();
@@ -209,7 +211,7 @@ public class PopupActivity extends Activity {
         textViewArtist.setBackground(border3);
 */
         RelativeLayout.LayoutParams lp4 = new RelativeLayout.LayoutParams
-                (width-height-20, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                (width-height-20, height/4 - 15);
         lp4.addRule(RelativeLayout.BELOW,textViewArtist.getId());
         lp4.setMargins(10, 0, 10,0);
         firstLayout.addView(textViewAlbum, lp4);
@@ -334,84 +336,4 @@ public void onConfigurationChanged(Configuration newConfig) {
         }
     }
 
-    class SizeAdjuster implements Runnable
-    {
-        int maxSize = 0;
-        int maxHeight = -1;
-        TextView textView = null;
-        int maxNumberOfLine = 1;
-        TextView biggerTextView = null;
-        int minSizeDifference = 0;
-
-        public SizeAdjuster(TextView textView, int maxSize, TextView biggerTextView, int minSizeDifference)
-        {
-            this.textView = textView;
-            this.maxSize = maxSize;
-            this.biggerTextView = biggerTextView;
-            this.minSizeDifference = minSizeDifference;
-        }
-
-        public SizeAdjuster(TextView textView, int startSize, int maxHeight, int maxNumberOfLine)
-        {
-            this.textView = textView;
-            this.maxSize = startSize;
-            this.maxHeight = maxHeight;
-            this.maxNumberOfLine = maxNumberOfLine;
-        }
-
-         @Override
-            public void run() {
-                            Log.d("SongNotif", "textView : " + textView.getText());
-
-                            Log.d("SongNotif", "size tried : " + textView.getTextSize() );
-
-
-                            Log.d("SongNotif", "height : " + textView.getLineHeight());
-                            int height_in_pixels = textView.getLineCount() * textView.getLineHeight(); //approx height text
-
-                if (textView.getTextSize() > maxSize ||textView.getLineCount() > maxNumberOfLine || (maxHeight != -1 && height_in_pixels >= maxHeight) || (biggerTextView != null && biggerTextView.getLineHeight() - textView.getLineHeight() <= minSizeDifference))
-                {
-                    float newSize = textView.getTextSize();
-                    Log.d("SongNotif", "max size : " + maxSize);
-                    if (textView.getTextSize() > maxSize)
-                        newSize = maxSize;
-                    Log.d("SongNotif", "new size : " + newSize);
-
-                    Log.d("SongNotif", "line count : " + textView.getLineCount() );
-                    if (textView.getLineCount() > maxNumberOfLine)
-                        newSize = Math.min(newSize, textView.getTextSize()/textView.getLineCount() * maxNumberOfLine);
-                    Log.d("SongNotif", "new size : " + newSize);
-
-                    Log.d("SongNotif", "max height : " + maxHeight);
-                    Log.d("SongNotif", "current height : " + height_in_pixels);
-                    if (maxHeight != -1 && height_in_pixels > maxHeight)
-                        newSize = Math.min(newSize, maxHeight / textView.getLineCount());
-                    Log.d("SongNotif", "new size : " + newSize);
-
-                    if (biggerTextView != null)
-                    {
-                        Log.d("SongNotif", "bigger text line height : " + biggerTextView.getLineHeight());
-                        Log.d("SongNotif", "height : " + textView.getLineHeight());
-                        Log.d("SongNotif", "min diff : " + minSizeDifference);
-                    }
-                    if (biggerTextView != null && biggerTextView.getLineHeight() - textView.getLineHeight() <= minSizeDifference)
-                        newSize = Math.min(newSize, biggerTextView.getLineHeight() - minSizeDifference);
-                    Log.d("SongNotif", "new size : " + newSize);
-                    if (newSize >0 && newSize != textView.getTextSize()) {
-                        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, newSize);
-                        if (biggerTextView != null)
-                            textView.post(new SizeAdjuster(textView, maxSize, biggerTextView, minSizeDifference));
-                        else
-                            textView.post(new SizeAdjuster(textView, maxSize, maxHeight, maxNumberOfLine));
-                    }
-                }
-
-            }
-
-
-    }
-
-    public static int spToPx(float sp, Context context) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.getResources().getDisplayMetrics());
-    }
 }
