@@ -15,6 +15,8 @@ public class PlayingSongPopupReceiver extends PlayingSongBaseReceiver {
 
         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra("artist", artist);
