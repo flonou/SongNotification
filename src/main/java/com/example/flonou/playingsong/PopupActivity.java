@@ -97,7 +97,7 @@ public class PopupActivity extends Activity {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
 
-        getWindow().addFlags(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        //getWindow().addFlags(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         //getWindow().setTransitionBackgroundFadeDuration(10);
         GradientDrawable shape =  new GradientDrawable();
